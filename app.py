@@ -11,10 +11,10 @@ from datetime import datetime
 
 # Load environment variables
 load_dotenv()
-api_key = os.getenv('GOOGLE_API_KEY')
+api_key = st.secrets.get("GEMINI_API_KEY") if "GEMINI_API_KEY" in st.secrets else os.getenv('GOOGLE_API_KEY')
 
 if not api_key:
-    st.error("Error: GOOGLE_API_KEY not found in .env file")
+    st.error("Error: GEMINI_API_KEY not found in Streamlit secrets or .env file")
     st.stop()
 
 # Page configuration
@@ -100,12 +100,13 @@ Please answer based on the documentation above."""
 def log_feedback(query, answer, feedback):
     """Log feedback to Google Sheet"""
     try:
-        # Load credentials
+        # Load credentials from Streamlit secrets
         scope = [
             'https://spreadsheets.google.com/feeds',
             'https://www.googleapis.com/auth/drive'
         ]
-        creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
+        creds_dict = json.loads(st.secrets["GOOGLE_CREDS"])
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client_gs = gspread.authorize(creds)
 
         # Open the sheet
@@ -117,8 +118,8 @@ def log_feedback(query, answer, feedback):
         sheet.append_row([timestamp, query, answer_preview, feedback])
 
         return True
-    except FileNotFoundError:
-        st.warning("Note: creds.json not found. Feedback not logged to Google Sheets.")
+    except KeyError:
+        st.warning("Note: GOOGLE_CREDS not found in Streamlit secrets. Feedback not logged to Google Sheets.")
         return False
     except Exception as e:
         st.warning(f"Note: Could not log feedback - {e}")
