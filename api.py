@@ -277,6 +277,21 @@ Answer:"""
     }
 
 
+def get_google_creds(scope):
+    """Load Google service account credentials from a local file or environment variable."""
+    if os.path.exists('creds.json'):
+        # Local development
+        return ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
+    else:
+        # Production — load from environment variable
+        creds_json = os.getenv('GOOGLE_CREDS')
+        if creds_json:
+            creds_dict = json.loads(creds_json)
+            return ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        else:
+            raise Exception('No Google credentials found')
+
+
 def log_feedback(query: str, answer: str, feedback: str) -> bool:
     """Log feedback to Google Sheet"""
     try:
@@ -285,13 +300,7 @@ def log_feedback(query: str, answer: str, feedback: str) -> bool:
             'https://www.googleapis.com/auth/drive'
         ]
 
-        # Local development: load from creds.json
-        if os.path.exists('creds.json'):
-            creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
-        # Production: would need to load from environment
-        else:
-            print("Warning: creds.json not found. Feedback not logged.")
-            return False
+        creds = get_google_creds(scope)
 
         client_gs = gspread.authorize(creds)
 
@@ -355,13 +364,7 @@ def load_analytics_data() -> dict:
             'https://www.googleapis.com/auth/drive'
         ]
 
-        # Local development: load from creds.json
-        if os.path.exists('creds.json'):
-            creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
-        # Production: would need to load from environment
-        else:
-            print("Warning: creds.json not found. Analytics not available.")
-            return dict(EMPTY_ANALYTICS)
+        creds = get_google_creds(scope)
 
         client_gs = gspread.authorize(creds)
 
