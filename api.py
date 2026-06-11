@@ -615,6 +615,23 @@ async def get_analytics():
     - confidence_breakdown: Count of High/Medium/Low confidence answers
     """
     try:
+        scope = ['https://spreadsheets.google.com/feeds',
+                 'https://www.googleapis.com/auth/drive']
+        creds = get_google_creds(scope)
+        client_gs = gspread.authorize(creds)
+
+        # Debug: list all sheets this account can access
+        sheets = client_gs.openall()
+        print(f"Available sheets: {[s.title for s in sheets]}")
+
+        sheet = client_gs.open('Amplitude Copilot Logs').sheet1
+        rows = sheet.get_all_records()
+        print(f"Total rows found: {len(rows)}")
+        print(f"First row sample: {rows[0] if rows else 'NO ROWS'}")
+    except Exception as e:
+        print(f"Debug error: {e}")
+
+    try:
         data = load_analytics_data()
         return AnalyticsResponse(**data)
     except Exception as e:
