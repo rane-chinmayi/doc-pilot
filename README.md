@@ -6,8 +6,8 @@ DocPilot is a RAG-based AI copilot that answers questions about analytics tools 
 
 ## Live Demo
 
-- Frontend: https://amplitude-copilot-frontend.vercel.app
-- Backend API: https://docpilot-api-v061.onrender.com
+- Frontend: [https://amplitude-copilot-frontend.vercel.app](https://docpilot-analytics.vercel.app/)
+- Backend API: [https://docpilot-api-v061.onrender.com](https://docpilot-api-v061.onrender.com/)
 
 ## Architecture
 
