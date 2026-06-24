@@ -532,6 +532,8 @@ async def ask(request: dict):
     - confidence: Confidence level (High/Medium/Low)
     - distance: FAISS similarity distance score
     """
+    start_time = time.time()
+
     query = request.get("query", "")
     model = request.get("model", "gemini-2.5-flash")
     tool = request.get("tool", "amplitude")
@@ -547,6 +549,7 @@ async def ask(request: dict):
             print(f"✅ Cache HIT — returning cached answer")
             result_with_flag = dict(cached_result)
             result_with_flag['from_cache'] = True
+            result_with_flag['response_time'] = round(time.time() - start_time, 2)
             return result_with_flag
 
         print(f"❌ Cache MISS — calling Gemini API")
@@ -567,6 +570,9 @@ async def ask(request: dict):
         # Save to cache before returning
         save_to_cache(cache_key, response_data)
         print(f"💾 Saved to cache. Total cached: {len(answer_cache)}")
+
+        response_time = round(time.time() - start_time, 2)
+        response_data['response_time'] = response_time
         return response_data
     except Exception as e:
         return AskResponse(
