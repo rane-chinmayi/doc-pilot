@@ -20,6 +20,9 @@ urls = [
     "https://amplitude.com/docs/analytics/charts/revenue-ltv",
     "https://amplitude.com/docs/analytics/charts/event-segmentation/event-segmentation-build",
     "https://amplitude.com/docs/analytics/charts/journeys/journeys-understand-visualizations",
+    "https://amplitude.com/docs/analytics/charts/funnel-analysis/funnel-analysis-interpret",
+    "https://amplitude.com/docs/analytics/charts/retention-analysis/retention-analysis-interpret",
+    "https://amplitude.com/docs/analytics/dashboard-create",
 ]
 
 docs_folder = "docs"
