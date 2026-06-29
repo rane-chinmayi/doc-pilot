@@ -161,7 +161,7 @@ MODEL_FALLBACK_CHAIN = [
     'gemini-2.5-flash',
     'gemini-2.5-flash-lite',
     'gemini-2.0-flash-lite',
-    'gemini-1.5-flash-latest'
+    'gemini-2.0-flash',
 ]
 
 def generate_with_retry(prompt, model='gemini-2.5-flash', retries=2, delay=3):
@@ -185,10 +185,14 @@ def generate_with_retry(prompt, model='gemini-2.5-flash', retries=2, delay=3):
                 return response, current_model
             except Exception as e:
                 last_error = e
-                if '429' in str(e) or 'RESOURCE_EXHAUSTED' in str(e):
+                error_str = str(e)
+                if '429' in error_str or 'RESOURCE_EXHAUSTED' in error_str:
                     print(f"Quota exceeded for {current_model}, trying next model...")
                     break  # Try next model
-                elif '503' in str(e) or 'UNAVAILABLE' in str(e):
+                elif '404' in error_str or 'NOT_FOUND' in error_str:
+                    print(f"Model {current_model} not found, trying next model...")
+                    break  # Try next model
+                elif '503' in error_str or 'UNAVAILABLE' in error_str:
                     if attempt < retries - 1:
                         time.sleep(delay)
                     else:
