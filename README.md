@@ -135,11 +135,38 @@ amplitude-copilot-frontend/         # Frontend (React + Vite)
 └── tailwind.config.js
 ```
 
-## Metrics
+## Evaluation Results
 
-- Total Queries: [update with real number]
-- Deflection Rate: [update with real number]
-- Positive Feedback: [update with real number]
+DocPilot was evaluated on 50 questions across Amplitude, Mixpanel, and Google Analytics — each answer manually checked against official documentation, with response time and manual search time recorded for comparison.
+
+| Metric | Value |
+|---|---|
+| Answer Accuracy | 74% (80% including partially correct) |
+| Avg Response Time | 4.31s |
+| Avg Manual Search Time | 27.26s |
+| Time Saved vs Manual Search | 84.2% |
+
+**Accuracy by tool:**
+
+| Tool | Accuracy |
+|---|---|
+| Mixpanel | 86.7% |
+| Amplitude | 75.0% |
+| Google Analytics | 60.0% |
+
+**Confidence calibration:**
+
+| Confidence Level | Actual Accuracy |
+|---|---|
+| High | 100% |
+| Medium | 66.7% |
+| Low | 33.3% |
+
+Full evaluation data (all 50 questions, scoring, and notes) is available in `DocPilot_Evaluation_Sheet.xlsx` in this repo.
+
+## Case Study
+
+A full write-up covering the problem, product decisions, evaluation methodology, and roadmap is available here: [link to your Notion case study]
 
 ## Built By
 

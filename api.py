@@ -161,7 +161,6 @@ MODEL_FALLBACK_CHAIN = [
     'gemini-2.5-flash',
     'gemini-2.5-flash-lite',
     'gemini-2.0-flash-lite',
-    'gemini-2.0-flash',
 ]
 
 def generate_with_retry(prompt, model='gemini-2.5-flash', retries=2, delay=3):
@@ -267,9 +266,14 @@ Answer:"""
     print(f"Prompt preview (first 300 chars): {prompt[:300]}")
 
     # Generate answer with Gemini
-    response, model_used = generate_with_retry(prompt, model=model)
+    try:
+        response, model_used = generate_with_retry(prompt, model=model)
+        answer = response.text
+    except Exception as e:
+        print(f"All models failed: {e}")
+        answer = "I'm currently experiencing high demand across all AI models. Please try again in a minute, or switch to a different model from the dropdown."
+        model_used = "unavailable"
 
-    answer = response.text
     source_url = SOURCE_URL_MAP.get(top_source, tool_config['docs_url'])
 
     return {
@@ -579,13 +583,14 @@ async def ask(request: dict):
         response_data['response_time'] = response_time
         return response_data
     except Exception as e:
+        print(f"Request error: {e}")
         return AskResponse(
-            answer=f"Error: {str(e)}",
+            answer="I'm currently experiencing high demand across all AI models. Please try again in a minute, or switch to a different model from the dropdown.",
             source="",
             source_url=tool_config['docs_url'],
             confidence="Low",
             distance=1.0,
-            model_used=model
+            model_used="unavailable"
         )
 
 
