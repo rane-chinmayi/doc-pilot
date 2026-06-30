@@ -166,7 +166,7 @@ Full evaluation data (all 50 questions, scoring, and notes) is available in `Doc
 
 ## Case Study
 
-A full write-up covering the problem, product decisions, evaluation methodology, and roadmap is available here: [link to your Notion case study]
+A full write-up covering the problem, product decisions, evaluation methodology, and roadmap is available here: [Notion Case Study](https://app.notion.com/p/DocPilot-From-Zero-to-Shipped-389c82f6c8a880d6a1a1fefea4ad27dc?source=copy_link)
 
 ## Built By
 
